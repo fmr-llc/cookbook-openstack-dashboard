@@ -132,7 +132,23 @@ if node['openstack']['dashboard']['ssl']['cert_url']
     owner  cert_owner
     group  cert_group
 
+    notifies :restart, 'service[apache2]', :delayed
     notifies :run, 'execute[restore-selinux-context]', :immediately
+  end
+elsif node['openstack']['dashboard']['ssl']['cert_data']
+  if node['openstack']['dashboard']['ssl']['cert_data']!="x"
+    file cert_file do
+      mode cert_mode
+      owner  cert_owner
+      group  cert_group
+      content node['openstack']['dashboard']['ssl']['cert_data']
+
+      notifies :restart, 'service[apache2]', :delayed
+      notifies :run, 'execute[restore-selinux-context]', :immediately
+    end
+    # Do not save cert data to node but ensure that for the
+    # next chef run it has been flagged as having been set
+    node.override['openstack']['dashboard']['ssl']['cert_data'] = "x"
   end
 else
   cookbook_file cert_file do
@@ -141,6 +157,7 @@ else
     owner  cert_owner
     group  cert_group
 
+    notifies :restart, 'service[apache2]', :delayed
     notifies :run, 'execute[restore-selinux-context]', :immediately
   end
 end
@@ -162,8 +179,23 @@ if node['openstack']['dashboard']['ssl']['key_url']
     owner  key_owner
     group  key_group
 
-    notifies :restart, 'service[apache2]', :immediately
+    notifies :restart, 'service[apache2]', :delayed
     notifies :run, 'execute[restore-selinux-context]', :immediately
+  end
+elsif node['openstack']['dashboard']['ssl']['key_data']
+  if node['openstack']['dashboard']['ssl']['key_data']!="x"
+    file key_file do
+      mode key_mode
+      owner  key_owner
+      group  key_group
+      content node['openstack']['dashboard']['ssl']['key_data']
+
+      notifies :restart, 'service[apache2]', :delayed
+      notifies :run, 'execute[restore-selinux-context]', :immediately
+    end
+    # Do not save cert data to node but ensure that for the
+    # next chef run it has been flagged as having been set
+    node.override['openstack']['dashboard']['ssl']['key_data'] = "x"
   end
 else
   cookbook_file key_file do
@@ -172,6 +204,7 @@ else
     owner  key_owner
     group  key_group
 
+    notifies :restart, 'service[apache2]', :delayed
     notifies :run, 'execute[restore-selinux-context]', :immediately
   end
 end
