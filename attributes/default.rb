@@ -38,6 +38,10 @@ default['openstack']['dashboard']['server_hostname'] = nil
 default['openstack']['dashboard']['use_ssl'] = true
 default['openstack']['dashboard']['ssl']['cert_url'] = nil
 default['openstack']['dashboard']['ssl']['key_url'] = nil
+
+default['openstack']['dashboard']['ssl']['cert_data'] = nil
+default['openstack']['dashboard']['ssl']['key_data'] = nil
+
 # When using a remote certificate and key, the names of the actual installed certificate
 # and key in the file system are determined by the following two attributes.
 # If you want the name of the installed files to match the name of the files from the URL,
@@ -53,7 +57,7 @@ default['openstack']['dashboard']['swift']['enabled'] = 'False'
 
 default['openstack']['dashboard']['theme'] = 'default'
 
-default['openstack']['dashboard']['apache']['sites-path'] = "#{node['apache']['dir']}/openstack-dashboard"
+default['openstack']['dashboard']['apache']['sites-path'] = "#{node['apache']['dir']}/openstack-dashboard.conf"
 
 default['openstack']['dashboard']['http_port'] = 80
 default['openstack']['dashboard']['https_port'] = 443
@@ -79,7 +83,7 @@ when 'rhel'
     'memcache_python_packages' => ['python-memcached'],
     'package_overrides' => ''
   }
-  default['openstack']['dashboard']['apache']['sites-path'] = "#{node["apache"]["dir"]}/sites-available/openstack-dashboard"
+  default['openstack']['dashboard']['apache']['sites-path'] = "#{node["apache"]["dir"]}/sites-available/openstack-dashboard.conf"
 when 'suse'
   default['openstack']['dashboard']['horizon_user'] = 'wwwrun'
   default['openstack']['dashboard']['horizon_group'] = 'www'
@@ -116,7 +120,7 @@ when 'debian'
   else
     default['openstack']['dashboard']['platform']['horizon_packages'] = ['lessc', 'openstack-dashboard']
   end
-  default['openstack']['dashboard']['apache']['sites-path'] = "#{node["apache"]["dir"]}/sites-available/openstack-dashboard"
+  default['openstack']['dashboard']['apache']['sites-path'] = "#{node["apache"]["dir"]}/sites-available/openstack-dashboard.conf"
 end
 
 default['openstack']['dashboard']['dash_path'] = "#{node['openstack']['dashboard']['django_path']}/openstack_dashboard"
